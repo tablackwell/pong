@@ -14,6 +14,7 @@ public:
   void init();
   bool getStatus();
   bool getMenuActive();
+  bool isPlayerReady();
 private:
   sf::RenderWindow* window;
   sf::SoundBuffer buffer;
@@ -28,6 +29,8 @@ private:
   sf::RectangleShape playerTwo;
   sf::CircleShape ball;
   sf::Text scoreboard;
+  sf::Text onePlayerText;
+  sf::Text twoPlayerText;
   sf::Text bulletin;
   sf::Font font;
   sf::Clock globalClock;
@@ -37,6 +40,7 @@ private:
 
   bool twoPlayerMode; //If two player mode is enabled... not yet implemented
   bool ballWaiting;
+  bool playerReady;
   bool menuActive;
   bool done;
   int p1y;

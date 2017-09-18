@@ -14,32 +14,41 @@ void GameView::init(){
   playerOne.setPosition(785,200);
   playerTwo.setPosition(0,200);
   ball.setPosition(375,275);
+  ball.setFillColor(sf::Color(247, 132, 131));
   //init scores
   p1Score = 0;
   p2Score = 0;
   cpuScore = 0;
 
   //Scoreboard setup
-  font.loadFromFile("../src/fonts/arial.ttf");
+  font.loadFromFile("../src/fonts/DTM-Sans.otf");
   scoreboard.setFont(font);
-  scoreboard.setPosition(250,10);
+  scoreboard.setPosition(200,10);
   scoreboard.setString(scoreString);
-  scoreboard.setCharacterSize(15);
-  scoreboard.setFillColor(sf::Color::White);
+  scoreboard.setCharacterSize(20);
+  scoreboard.setFillColor(sf::Color(247,233,131));
 
-  menuString = "           Welcome to Pong!\n\n"
-               "Press 1 for single player mode\n"
-               "Press 2 for two player mode\n\n"
-               "           Controls:\n\n"
-               "P1 = UP/DOWN\n"
-               "P2 = W/S\n\n\n"
-               "(Press ESC to quit)";
+  menuString = "Welcome to Pong!\n\n"
+               "P1 = UP/DOWN \n"
+               "P2 = W/S\n\n"
+               "Press ESC to quit\n"
+               "Press ENTER to start\n"
+               "UP/DOWN to switch mode\n";
   bulletin.setFont(font);
   bulletin.setPosition(250,100);
   bulletin.setString(menuString);
   bulletin.setCharacterSize(20);
-  bulletin.setFillColor(sf::Color::White);
-
+  bulletin.setFillColor(sf::Color(247, 233, 131));
+  onePlayerText.setFont(font);
+  onePlayerText.setCharacterSize(20);
+  twoPlayerText.setCharacterSize(20);
+  twoPlayerText.setFont(font);
+  onePlayerText.setPosition(250,350);
+  twoPlayerText.setPosition(250,400);
+  onePlayerText.setFillColor(sf::Color(247, 132, 131));
+  twoPlayerText.setFillColor(sf::Color(247,233,131));
+  onePlayerText.setString("Single player mode\n");
+  twoPlayerText.setString("Two player mode\n\n");
   //Sound setup
   buffer.loadFromFile("../src/sfx/blip.wav");
   buffer2.loadFromFile("../src/sfx/blip2.wav");
@@ -59,7 +68,7 @@ void GameView::init(){
   twoPlayerMode = false;
   ballWaiting = false;
   done = false;
-  menuActive = true;
+  playerReady = false;
 }
 
 void GameView::update(){
@@ -75,8 +84,8 @@ bool GameView::getStatus(){
   return done;
 }
 
-bool GameView::getMenuActive(){
-  return menuActive;
+bool GameView::isPlayerReady(){
+  return playerReady;
 }
 
 void GameView::updateScore(){
@@ -98,11 +107,13 @@ void GameView::updateScore(){
   }
 
   if(!twoPlayerMode){
-    scoreString = "Player One Score: " + std::to_string(p1Score) + "     " +
+    scoreString = "Player One Score: "
+                  + std::to_string(p1Score)+ "                  "
                   "CP Score: " + std::to_string(cpuScore);
   }
   else{
-    scoreString = "Player One Score: " + std::to_string(p1Score) + "     " +
+    scoreString = "Player One Score: "
+                  +std::to_string(p1Score)+"                  "
                   "Player Two Score: " + std::to_string(p2Score);
   }
   scoreboard.setString(scoreString);
@@ -219,18 +230,28 @@ void GameView::endScreen(){
 }
 
 void GameView::menuScreen(){
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
-    menuActive = false;
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+    twoPlayerMode = false;
+    onePlayerText.setFillColor(sf::Color(247, 132, 131));
+    twoPlayerText.setFillColor(sf::Color(247, 233, 131));
   }
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
-    menuActive = false;
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
     twoPlayerMode = true;
+    onePlayerText.setFillColor(sf::Color(247, 233, 131));
+    twoPlayerText.setFillColor(sf::Color(247, 132, 131));
   }
   //Close if user hits escape
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
     window->close();
   }
-  window->clear(sf::Color::Blue);
+
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+    playerReady = true;
+  }
+
+  window->clear(sf::Color(72, 85, 97));
   window->draw(bulletin);
+  window->draw(onePlayerText);
+  window->draw(twoPlayerText);
   window->display();
 }

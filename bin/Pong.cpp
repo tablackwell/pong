@@ -15,7 +15,7 @@ void Pong::run(){
   {
     float deltaTime = clock.restart().asSeconds();
     handleEvents();
-    if(gameView.getMenuActive()){
+    if(!gameView.isPlayerReady()){
       gameView.menuScreen();
     }
     else if(!gameView.getStatus()){
