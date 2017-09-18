@@ -167,7 +167,7 @@ void GameView::updateLogic(float deltaTime){
   // ball collision with walls
   if(!ballWaiting){
     ball.move(400 * bdx * deltaTime, 400 * bdy * deltaTime);
-    if((ball.getPosition().y <= 0) or (ball.getPosition().y >= 592)){
+    if((ball.getPosition().y <= 1) or (ball.getPosition().y >= 589)){
       bdy = - bdy;
       blip.play();
     }
@@ -227,7 +227,7 @@ void GameView::endScreen(){
     bdx = 1;
     bdy = 1;
     done = false;
-    menuActive = true;
+    playerReady = false;
   }
   scoreboard.setString(resultsString);
   window->clear(sf::Color::Black);
