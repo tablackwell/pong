@@ -6,12 +6,12 @@ class GameView{
 public:
   GameView(sf::RenderWindow* window);
 
-  void update();
   void updateLogic(float);
   void updateGraphics();
 
   void endScreen();
   void menuScreen();
+  void setWindow(sf::RenderWindow* app);
 
   void init();
   bool getStatus();

@@ -37,10 +37,11 @@ void Pong::run(){
 
     // Run the game loop until its done
     else if(!gameView.getStatus()){
-      gameView.update();
+      gameView.updateGraphics();
       gameView.updateLogic(deltaTime);
     }
 
+    // Go to the end screen. User has option of restarting or quitting.
     else{
       gameView.endScreen();
     }

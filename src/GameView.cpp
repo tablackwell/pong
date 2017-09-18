@@ -2,12 +2,20 @@
 #include <cstdlib>
 #include <ctime>
 
+/*
+initializes a GameView instance with a pointer to the app contained
+in the Pong instance that called it
+*/
 GameView::GameView(sf::RenderWindow* app):
 playerOne(sf::Vector2f(15,100)),playerTwo(sf::Vector2f(15,100)), ball(10){
     window = app;
 }
 
-void GameView::update(){
+/*
+Acts upon the window we have a pointer to. Clears the screen to black, draws
+our game objects and the scoreboard.
+*/
+void GameView::updateGraphics(){
   window->clear(sf::Color::Black);
   window->draw(playerOne);
   window->draw(playerTwo);
@@ -16,14 +24,32 @@ void GameView::update(){
   window->display();
 }
 
+/*
+Returns true if a game is complete, false if otherwise.
+*/
 bool GameView::getStatus(){
   return done;
 }
 
+/*
+Set the gameview window to something else.
+*/
+void GameView::setWindow(sf::RenderWindow* app){
+}
+
+/*
+Returns true if the player has selected input to leave the exit screen.
+False if otherwise. This is set in the menuScreen function.
+*/
 bool GameView::isPlayerReady(){
   return playerReady;
 }
 
+
+/*
+Checks if our scores indicate a finished game. Displays the appropriate
+message depending on which player has won.
+*/
 void GameView::updateScore(){
   if (cpuScore >= 11){
     done = true;
@@ -40,8 +66,7 @@ void GameView::updateScore(){
     resultsString = "\n\nPlayer Two Wins!\n\n";
     resultsString += "\n\nPress ENTER to restart \nor ESCAPE to quit";
   }
-
-  if(!twoPlayerMode){
+  if(!twoPlayerMode){ //If the other player is a CPU
     scoreString = "Player One Score: "
                   + std::to_string(p1Score)+ "                  "
                   "CP Score: " + std::to_string(cpuScore);
@@ -53,6 +78,8 @@ void GameView::updateScore(){
   }
   scoreboard.setString(scoreString);
 }
+
+
 
 /*
   Handling of movement of balls and paddles
@@ -162,10 +189,17 @@ void GameView::updateLogic(float deltaTime){
     globalClock.restart();
   }
 
-  updateScore();
+  updateScore(); //Check the score after all this mess
 }
 
+
+/*
+Helper method to adjust the x and y velocities of the ball when it comes
+into contact with a wall. This is called every time the ball collides
+with one of the vertical boundaries.
+*/
 void GameView::perturb(){
+
   srand (time(NULL));
   int i = rand() % 999;
   int coinflip = rand() % 1;
@@ -200,61 +234,79 @@ void GameView::perturb(){
 
 }
 
+/*
+Resets the game variables like time, speed, etc.
+Also resets the done and playerReady flags in order to trigger
+the menu screen.
+*/
 void GameView::reset(){
   playerOne.setPosition(765,200);
   playerTwo.setPosition(20,200);
   ball.setPosition(375,275);
+  ballSpeed = 1.0;
   p1Score = 0;
   p2Score = 0;
   cpuScore = 0;
   cdx = -1;
-  bdx = 1;
-  bdy = 1;
+  bdx = 1.0;
+  bdy = 1.0;
   done = false;
-  menuActive = true;
+  playerReady = false;
 }
 
+/*
+Method implementing the menu screen. This should very well be in its own class.
+This both checks for player input, and draws on the screen. Keyboard inputs
+will flag boolean variables for game modes, and also change color of options
+on the screen.
+*/
 void GameView::menuScreen(){
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
     twoPlayerMode = false;
-    onePlayerText.setFillColor(sf::Color(247, 132, 131));
-    twoPlayerText.setFillColor(sf::Color(247, 233, 131));
+    onePlayerText.setFillColor(sf::Color(247, 132, 131)); //Change to red
+    twoPlayerText.setFillColor(sf::Color(247, 233, 131)); //Change to yellow
   }
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
     twoPlayerMode = true;
-    onePlayerText.setFillColor(sf::Color(247, 233, 131));
-    twoPlayerText.setFillColor(sf::Color(247, 132, 131));
+    onePlayerText.setFillColor(sf::Color(247, 233, 131)); //red
+    twoPlayerText.setFillColor(sf::Color(247, 132, 131)); //yellow
   }
   //Close if user hits escape
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
     window->close();
   }
 
+  //We exit the menuscreen loop in Pong.cpp, move on to the game.
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
     playerReady = true;
   }
 
+  //Enables and disables speedups
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
     speedupToggled = true;
-    speedupText.setFillColor(sf::Color(247, 132, 131));
+    speedupText.setFillColor(sf::Color(247, 132, 131)); //change to red
     speedupText.setString("Speedup Enabled\n(hit D to disable)");
 
   }
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
     speedupToggled = false;
-    speedupText.setFillColor(sf::Color(247, 233, 131));
+    speedupText.setFillColor(sf::Color(247, 233, 131)); //yellow
     speedupText.setString("Speedup Disabled\n(hit S to enable)");
   }
 
-
-  window->clear(sf::Color(72, 85, 97));
-  window->draw(bulletin);
-  window->draw(onePlayerText);
-  window->draw(twoPlayerText);
-  window->draw(speedupText);
+  //Draw the menu screen on our window
+  window->clear(sf::Color(72, 85, 97)); //A nice grey-ish color
+  window->draw(bulletin); //The pong and controls text
+  window->draw(onePlayerText); //1player option select
+  window->draw(twoPlayerText); //2player option select
+  window->draw(speedupText); //displays whether speedup enabled
   window->display();
 }
 
+/*
+Displays the victory / game over screen. Only contains two
+keychecks - one to restart the game and one to quit.
+*/
 void GameView::endScreen(){
   //Close if user hits escape
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
@@ -265,19 +317,27 @@ void GameView::endScreen(){
     reset();
   }
   scoreboard.setString(resultsString);
-  window->clear(sf::Color::Black);
+  window->clear(sf::Color(72, 85, 97));
   window->draw(scoreboard);
   window->display();
 }
 
+/*
+Initializes the variables the game needs to function.
+*/
 void GameView::init(){
-  //Paddles and stuff
+
+
+  sf::Clock clock;
+
+  //Paddles and ball
   playerOne.setFillColor(sf::Color(151,209,216));
   playerTwo.setFillColor(sf::Color(221,177,221));
   playerOne.setPosition(765,200);
   playerTwo.setPosition(20,200);
   ball.setPosition(375,275);
   ball.setFillColor(sf::Color(247, 132, 131));
+
   //init scores
   p1Score = 0;
   p2Score = 0;
@@ -291,7 +351,8 @@ void GameView::init(){
   scoreboard.setCharacterSize(20);
   scoreboard.setFillColor(sf::Color(247,233,131));
 
-  menuString = "Welcome to Pong!\n\n"
+  // Menu setup
+  menuString = "Welcome to Pong.\n\n"
                "P1 = UP/DOWN \n"
                "P2 = W/S\n\n"
                "Press ESC to quit\n"
@@ -337,7 +398,7 @@ void GameView::init(){
   bdy = 1.0;
   ballSpeed = 1.0;
 
-  sf::Clock clock;
+  // Game Logic Booleans
   twoPlayerMode = false;
   ballWaiting = false;
   done = false;
