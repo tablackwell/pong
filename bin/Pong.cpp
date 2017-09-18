@@ -13,19 +13,24 @@ void Pong::run(){
   gameView.init();
   while(App.isOpen())
   {
+
     float deltaTime = clock.restart().asSeconds();
     handleEvents();
+
     if(!gameView.isPlayerReady()){
       gameView.menuScreen();
     }
+
     else if(!gameView.getStatus()){
       gameView.update();
       gameView.updateLogic(deltaTime);
       gameView.updateScore();
     }
+
     else{
       gameView.endScreen();
     }
+
   }
 }
 

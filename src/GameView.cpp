@@ -139,13 +139,19 @@ void GameView::updateLogic(float deltaTime){
 
   //AI
   if(!twoPlayerMode){
-    if(ball.getPosition().y > playerTwo.getPosition().y){
+    if((ball.getPosition().y > playerTwo.getPosition().y) &&
+    playerTwo.getPosition().y <= 500){
       cdx = 1;
     }
-    else if (ball.getPosition().y < playerTwo.getPosition().y){
+    else if ((ball.getPosition().y < playerTwo.getPosition().y) &&
+    playerTwo.getPosition().y >= 0){
       cdx = -1;
     }
+    else{
+      cdx = 0;
+    }
     playerTwo.move(0.0,cdx * 300.0 * deltaTime); //Seems to be a good speed I guess
+
   }
   else{
     if ((sf::Keyboard::isKeyPressed(sf::Keyboard::W)) &&
@@ -161,7 +167,7 @@ void GameView::updateLogic(float deltaTime){
   // ball collision with walls
   if(!ballWaiting){
     ball.move(400 * bdx * deltaTime, 400 * bdy * deltaTime);
-    if((ball.getPosition().y <= 0) or (ball.getPosition().y >= 591)){
+    if((ball.getPosition().y <= 0) or (ball.getPosition().y >= 592)){
       bdy = - bdy;
       blip.play();
     }
