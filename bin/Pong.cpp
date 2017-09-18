@@ -12,7 +12,7 @@
 #include <SFML/Audio.hpp>
 #include <Pong.hpp>
 #include <string>
-#include <GameView.hpp>
+#include <GameLogic.hpp>
 
 
 // Constructor initializes the render window via member initialization list
@@ -21,8 +21,8 @@ Pong::Pong(): App(sf::VideoMode(800,600,32), "Pong!",sf::Style::Titlebar | sf::S
 /* Main game loop */
 void Pong::run(){
   //Construct and initialize our game view class
-  GameView gameView = GameView(&App);
-  gameView.init();
+  GameLogic gameLogic = GameLogic(&App);
+  gameLogic.init();
   while(App.isOpen())
   {
 
@@ -31,19 +31,19 @@ void Pong::run(){
     handleEvents();
 
     // Menu screen, runs until appropriate player input (enter)
-    if(!gameView.isPlayerReady()){
-      gameView.menuScreen();
+    if(!gameLogic.isPlayerReady()){
+      gameLogic.menuScreen();
     }
 
     // Run the game loop until its done
-    else if(!gameView.getStatus()){
-      gameView.updateGraphics();
-      gameView.updateLogic(deltaTime);
+    else if(!gameLogic.getStatus()){
+      gameLogic.updateGraphics();
+      gameLogic.updateLogic(deltaTime);
     }
 
     // Go to the end screen. User has option of restarting or quitting.
     else{
-      gameView.endScreen();
+      gameLogic.endScreen();
     }
 
   }

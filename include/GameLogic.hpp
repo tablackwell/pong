@@ -2,9 +2,9 @@
 #include <SFML/Audio.hpp>
 #include <string>
 
-class GameView{
+class GameLogic{
 public:
-  GameView(sf::RenderWindow* window);
+  GameLogic(sf::RenderWindow* window);
 
   void updateLogic(float);
   void updateGraphics();

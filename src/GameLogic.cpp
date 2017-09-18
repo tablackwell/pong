@@ -1,12 +1,12 @@
-#include <GameView.hpp>
+#include <GameLogic.hpp>
 #include <cstdlib>
 #include <ctime>
 
 /*
-initializes a GameView instance with a pointer to the app contained
+initializes a GameLogic instance with a pointer to the app contained
 in the Pong instance that called it
 */
-GameView::GameView(sf::RenderWindow* app):
+GameLogic::GameLogic(sf::RenderWindow* app):
 playerOne(sf::Vector2f(15,100)),playerTwo(sf::Vector2f(15,100)), ball(10){
     window = app;
 }
@@ -15,7 +15,7 @@ playerOne(sf::Vector2f(15,100)),playerTwo(sf::Vector2f(15,100)), ball(10){
 Acts upon the window we have a pointer to. Clears the screen to black, draws
 our game objects and the scoreboard.
 */
-void GameView::updateGraphics(){
+void GameLogic::updateGraphics(){
   window->clear(sf::Color::Black);
   window->draw(playerOne);
   window->draw(playerTwo);
@@ -27,21 +27,21 @@ void GameView::updateGraphics(){
 /*
 Returns true if a game is complete, false if otherwise.
 */
-bool GameView::getStatus(){
+bool GameLogic::getStatus(){
   return done;
 }
 
 /*
 Set the gameview window to something else.
 */
-void GameView::setWindow(sf::RenderWindow* app){
+void GameLogic::setWindow(sf::RenderWindow* app){
 }
 
 /*
 Returns true if the player has selected input to leave the exit screen.
 False if otherwise. This is set in the menuScreen function.
 */
-bool GameView::isPlayerReady(){
+bool GameLogic::isPlayerReady(){
   return playerReady;
 }
 
@@ -50,7 +50,7 @@ bool GameView::isPlayerReady(){
 Checks if our scores indicate a finished game. Displays the appropriate
 message depending on which player has won.
 */
-void GameView::updateScore(){
+void GameLogic::updateScore(){
   if (cpuScore >= 11){
     done = true;
     resultsString = "\n\nGAME OVER\n\n";
@@ -88,7 +88,7 @@ void GameView::updateScore(){
   of seconds rather than milliseconds, thus the use of float rather than
   int.
 */
-void GameView::updateLogic(float deltaTime){
+void GameLogic::updateLogic(float deltaTime){
   //Player paddles
   if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) &&
   (playerOne.getPosition().y >= 0) ){
@@ -187,7 +187,7 @@ void GameView::updateLogic(float deltaTime){
   updateScore(); //Check the score after all this mess
 }
 
-void GameView::resetBall(){
+void GameLogic::resetBall(){
   if(bdx > 0.0){
     bdx = 1.0;
   }
@@ -212,7 +212,7 @@ Helper method to adjust the x and y velocities of the ball when it comes
 into contact with a wall. This is called every time the ball collides
 with one of the vertical boundaries.
 */
-void GameView::perturb(){
+void GameLogic::perturb(){
 
   srand (time(NULL));
   int i = rand() % 999;
@@ -253,7 +253,7 @@ Resets the game variables like time, speed, etc.
 Also resets the done and playerReady flags in order to trigger
 the menu screen.
 */
-void GameView::reset(){
+void GameLogic::reset(){
   playerOne.setPosition(765,200);
   playerTwo.setPosition(20,200);
   ball.setPosition(375,275);
@@ -274,7 +274,7 @@ This both checks for player input, and draws on the screen. Keyboard inputs
 will flag boolean variables for game modes, and also change color of options
 on the screen.
 */
-void GameView::menuScreen(){
+void GameLogic::menuScreen(){
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
     twoPlayerMode = false;
     onePlayerText.setFillColor(sf::Color(247, 132, 131)); //Change to red
@@ -321,7 +321,7 @@ void GameView::menuScreen(){
 Displays the victory / game over screen. Only contains two
 keychecks - one to restart the game and one to quit.
 */
-void GameView::endScreen(){
+void GameLogic::endScreen(){
   //Close if user hits escape
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
     window->close();
@@ -339,7 +339,7 @@ void GameView::endScreen(){
 /*
 Initializes the variables the game needs to function.
 */
-void GameView::init(){
+void GameLogic::init(){
 
 
   sf::Clock clock;
