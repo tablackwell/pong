@@ -167,19 +167,27 @@ void GameView::updateLogic(float deltaTime){
   // ball collision with walls
   if(!ballWaiting){
     ball.move(400 * bdx * deltaTime, 400 * bdy * deltaTime);
-    if((ball.getPosition().y <= 1) or (ball.getPosition().y >= 589)){
+    if(ball.getPosition().y <= 0){
       bdy = - bdy;
       blip.play();
+      ball.setPosition(ball.getPosition().x, ball.getPosition().y + 1);
+    }
+    if (ball.getPosition().y >= 580){
+      bdy = - bdy;
+      blip.play();
+      ball.setPosition(ball.getPosition().x, ball.getPosition().y - 1);
     }
 
     // Collisions with paddles
     if(ball.getGlobalBounds().intersects(playerOne.getGlobalBounds())){
       bdx = -bdx;
       blip2.play();
+      ball.setPosition(ball.getPosition().x - 1.0, ball.getPosition().y);
     }
     if(ball.getGlobalBounds().intersects(playerTwo.getGlobalBounds())){
       bdx = - bdx;
       blip2.play();
+      ball.setPosition(ball.getPosition().x + 1.0, ball.getPosition().y);
     }
 
     // Scoring stuff
@@ -227,7 +235,7 @@ void GameView::endScreen(){
     bdx = 1;
     bdy = 1;
     done = false;
-    playerReady = false;
+    menuActive = true;
   }
   scoreboard.setString(resultsString);
   window->clear(sf::Color::Black);
