@@ -163,11 +163,8 @@ void GameView::updateLogic(float deltaTime){
     // Scoring stuff
     if(ball.getPosition().x <= 0){ //If p1 scores
       p1Score += 1;
-      ball.setPosition(375,275);
-      ballWaiting = true;
-      ballTimer = globalClock.getElapsedTime().asSeconds();
       scoreSound.play();
-      ballSpeed = 1.0;
+      resetBall();
     }
     else if (ball.getPosition().x >= 780){ //if p2 / cpu scores
       if(!twoPlayerMode){
@@ -178,10 +175,8 @@ void GameView::updateLogic(float deltaTime){
         p2Score += 1;
         scoreSound.play();
       }
-      ball.setPosition(375,275);
-      ballWaiting = true;
-      ballTimer = globalClock.getElapsedTime().asSeconds();
-      ballSpeed = 1.0;
+      resetBall();
+
     }
   }
   else if((globalClock.getElapsedTime().asSeconds() - ballTimer) > 2){ //Wait 2 seconds
@@ -190,6 +185,25 @@ void GameView::updateLogic(float deltaTime){
   }
 
   updateScore(); //Check the score after all this mess
+}
+
+void GameView::resetBall(){
+  if(bdx > 0.0){
+    bdx = 1.0;
+  }
+  else{
+    bdx = -1.0;
+  }
+  if(bdy > 0.0){
+    bdy = 1.0;
+  }
+  else{
+    bdx = 1.0;
+  }
+  ball.setPosition(375,275);
+  ballWaiting = true;
+  ballTimer = globalClock.getElapsedTime().asSeconds();
+  ballSpeed = 1.0;
 }
 
 

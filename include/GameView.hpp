@@ -22,6 +22,8 @@ private:
   void reset();
   void updateScore();
   void perturb();
+  void resetBall();
+
 private:
   sf::RenderWindow* window;
   sf::SoundBuffer buffer;
@@ -50,7 +52,7 @@ private:
   std::string scoreString;
   std::string resultsString;
 
-  bool twoPlayerMode; //If two player mode is enabled... not yet implemented
+  bool twoPlayerMode;
   bool ballWaiting;
   bool playerReady;
   bool speedupToggled;
