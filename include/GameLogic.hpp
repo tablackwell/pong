@@ -6,10 +6,10 @@
 class GameLogic{
 public:
   GameLogic(sf::RenderWindow* window);
-
   void updateLogic(float);
-  void updateGraphics();
 
+  //Graphics stuff... not moved to GameView yet :(
+  void updateGraphics();
   void endScreen();
   void menuScreen();
   void setWindow(sf::RenderWindow* app);
