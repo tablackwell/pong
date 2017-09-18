@@ -13,6 +13,7 @@
 #include <Pong.hpp>
 #include <string>
 #include <GameLogic.hpp>
+#include <GameView.hpp>
 
 
 // Constructor initializes the render window via member initialization list

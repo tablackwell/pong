@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <string>
-
+#ifndef blah
+#define blah
 class GameLogic{
 public:
   GameLogic(sf::RenderWindow* window);
@@ -14,9 +15,14 @@ public:
   void setWindow(sf::RenderWindow* app);
 
   void init();
+
+  //Getters and setters
   bool getStatus();
   bool getMenuActive();
   bool isPlayerReady();
+  bool getTwoPlayerMode();
+  bool getSpeedupToggled();
+
 
 private:
   void reset();
@@ -72,3 +78,5 @@ private:
 
   float ballTimer;
 };
+
+#endif

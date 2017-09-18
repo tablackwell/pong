@@ -1,4 +1,5 @@
 #include <GameLogic.hpp>
+#include <GameView.hpp>
 #include <cstdlib>
 #include <ctime>
 
